@@ -10,7 +10,11 @@ interface NavBarProps {
   showThemeToggle?: boolean;
 }
 
-export function NavBar({ title, links, showThemeToggle = true }: NavBarProps) {
+export default function NavBar({
+  title,
+  links,
+  showThemeToggle = true,
+}: NavBarProps) {
   return (
     <>
       {/* Medium and above view port normal nav bar*/}
