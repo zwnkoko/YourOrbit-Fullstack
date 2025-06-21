@@ -2,10 +2,8 @@
 
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 
 export function AuthButton() {
-  const router = useRouter();
   const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
