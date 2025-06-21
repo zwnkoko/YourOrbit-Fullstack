@@ -29,7 +29,7 @@ export function NavBar({ title, links, showThemeToggle = true }: NavBarProps) {
               {link.label}
             </Link>
           ))}
-
+          <AuthButton />
           {/* Reserve space for theme toggle - Prevent layout shift on first load*/}
           <div className="flex h-10 w-10 items-center justify-center">
             {showThemeToggle && <ThemeToggle />}
