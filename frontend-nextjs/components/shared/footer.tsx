@@ -1,4 +1,4 @@
-export default function Footer() {
+export function Footer() {
   const EXTERNAL_LINKS = {
     github_profile: "https://github.com/zwnkoko",
     linkedin_profile: "https://www.linkedin.com/in/zwnkoko",

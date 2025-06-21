@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ThemeToggle } from "./theme-toggle";
+import { ThemeToggle } from "@/components/shared/theme-toggle";
+import { AuthButton } from "@/components/shared/auth-button";
 
 interface NavBarProps {
   title?: string;
@@ -10,11 +11,7 @@ interface NavBarProps {
   showThemeToggle?: boolean;
 }
 
-export default function NavBar({
-  title,
-  links,
-  showThemeToggle = true,
-}: NavBarProps) {
+export function NavBar({ title, links, showThemeToggle = true }: NavBarProps) {
   return (
     <>
       {/* Medium and above view port normal nav bar*/}
