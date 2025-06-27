@@ -3,12 +3,14 @@ import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { AuthButton } from "@/components/shared/auth-button";
 import { MobileNav } from "@/components/shared/mobile-nav";
 
+export interface NavLinks {
+  href: string;
+  label: string;
+}
+
 interface NavBarProps {
   title?: string;
-  links: {
-    href: string;
-    label: string;
-  }[];
+  links: NavLinks[];
   showThemeToggle?: boolean;
 }
 

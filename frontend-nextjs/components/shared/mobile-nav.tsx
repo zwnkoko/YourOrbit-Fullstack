@@ -11,13 +11,9 @@ import {
 import { Menu } from "lucide-react";
 import { AuthButton } from "@/components/shared/auth-button";
 import { useState } from "react";
+import { NavLinks } from "@/components/shared/nav-bar";
 
-interface MobileNavProps {
-  href: string;
-  label: string;
-}
-
-export function MobileNav({ links }: { links: MobileNavProps[] }) {
+export function MobileNav({ links }: { links: NavLinks[] }) {
   const [open, setOpen] = useState(false);
   return (
     <Drawer open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>
