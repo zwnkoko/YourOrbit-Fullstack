@@ -39,6 +39,7 @@ interface FileUploadProps {
   description: string;
   fileIcon?: LucideIcon;
   disabled?: boolean;
+  uploadedFiles: File[];
 }
 
 export function FileDropZone({
@@ -50,8 +51,8 @@ export function FileDropZone({
   description,
   fileIcon: FileIcon = File,
   disabled = false,
+  uploadedFiles = [],
 }: FileUploadProps) {
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [duplicateFileCount, setDuplicateFileCount] = useState(0); // Move to state
 
   const { getRootProps, getInputProps, isDragActive, fileRejections } =
@@ -61,22 +62,21 @@ export function FileDropZone({
       multiple: multiple,
       disabled: disabled,
       onDrop: (acceptedFiles) => {
-        setUploadedFiles((prevFiles) => {
-          const newFiles = acceptedFiles.filter(
-            (newFile) =>
-              !prevFiles.some(
-                (existingFile) =>
-                  existingFile.name === newFile.name &&
-                  existingFile.size === newFile.size &&
-                  existingFile.lastModified === newFile.lastModified
-              )
-          );
+        // Check for duplicates against files from props
+        const newFiles = acceptedFiles.filter(
+          (newFile) =>
+            !uploadedFiles.some(
+              (existingFile) =>
+                existingFile.name === newFile.name &&
+                existingFile.size === newFile.size &&
+                existingFile.lastModified === newFile.lastModified
+            )
+        );
 
-          const duplicateCount = acceptedFiles.length - newFiles.length;
-          setDuplicateFileCount(duplicateCount);
+        const duplicateCount = acceptedFiles.length - newFiles.length;
+        setDuplicateFileCount(duplicateCount);
 
-          return [...prevFiles, ...newFiles];
-        });
+        onFilesChange?.([...uploadedFiles, ...newFiles]);
       },
     });
 
@@ -84,7 +84,6 @@ export function FileDropZone({
   useEffect(() => {
     if (fileRejections.length > 0) {
       fileRejections.forEach(({ file, errors }) => {
-        console.log(errors);
         errors.forEach((error) => {
           const message =
             error.code === "file-too-large"
@@ -117,15 +116,6 @@ export function FileDropZone({
       setDuplicateFileCount(0);
     }
   }, [fileRejections, duplicateFileCount]);
-
-  // Effect to notify parent component when uploaded files change
-  useEffect(() => {
-    // Call parent component's onFilesChange callback
-    // Notify parent component of file changes
-    if (onFilesChange) {
-      onFilesChange(uploadedFiles);
-    }
-  }, [uploadedFiles]);
 
   return (
     <div className="container">
@@ -171,10 +161,10 @@ export function FileDropZone({
                 </div>
                 <button
                   onClick={() => {
-                    setUploadedFiles((prevFiles) => {
-                      const newFiles = prevFiles.filter((_, i) => i !== index);
-                      return newFiles;
-                    });
+                    const newFiles = uploadedFiles.filter(
+                      (_, i) => i !== index
+                    );
+                    onFilesChange?.(newFiles);
                   }}
                   className="text-red-500 hover:text-red-700 cursor-pointer"
                 >
