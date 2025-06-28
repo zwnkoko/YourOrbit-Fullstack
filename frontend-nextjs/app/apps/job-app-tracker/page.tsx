@@ -12,9 +12,10 @@ export default function JobAppTrackerPage() {
   const [isBreakAll, setIsBreakAll] = useState(false);
   const [textValue, setTextValue] = useState("");
 
-  // const handleFilesChange = (files: File[]) => {
-  //   setUploadedFiles(files);
-  // };
+  const handleFilesChange = (files: File[]) => {
+    console.log("Files changed:", files);
+    setUploadedFiles(files);
+  };
 
   const handleTextareaChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -36,7 +37,7 @@ export default function JobAppTrackerPage() {
       <FileDropZone
         accept={{ "image/*": [] }}
         maxSize={5 * 1024 * 1024} // 5MB
-        onFilesChange={() => {}}
+        onFilesChange={handleFilesChange}
         placeholder="Upload job posting screenshots"
         description="Drag & drop or click to browse • Max 5MB per file"
         fileIcon={FileImage}

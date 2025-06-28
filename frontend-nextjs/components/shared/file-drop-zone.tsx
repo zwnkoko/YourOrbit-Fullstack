@@ -70,11 +70,9 @@ export function FileDropZone({
           );
 
           const duplicateCount = acceptedFiles.length - newFiles.length;
-          setDuplicateFileCount(duplicateCount); // Update state
+          setDuplicateFileCount(duplicateCount);
 
-          const allFiles = [...prevFiles, ...newFiles];
-          onFilesChange?.(allFiles);
-          return allFiles;
+          return [...prevFiles, ...newFiles];
         });
       },
     });
@@ -116,6 +114,15 @@ export function FileDropZone({
       setDuplicateFileCount(0);
     }
   }, [fileRejections, duplicateFileCount]);
+
+  // Effect to notify parent component when uploaded files change
+  useEffect(() => {
+    // Call parent component's onFilesChange callback
+    // Notify parent component of file changes
+    if (onFilesChange) {
+      onFilesChange(uploadedFiles);
+    }
+  }, [uploadedFiles]);
 
   return (
     <div className="container">
