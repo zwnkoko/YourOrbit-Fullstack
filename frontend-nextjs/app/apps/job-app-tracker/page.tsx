@@ -12,11 +12,6 @@ export default function JobAppTrackerPage() {
   const [isBreakAll, setIsBreakAll] = useState(false);
   const [textValue, setTextValue] = useState("");
 
-  const handleFilesChange = (files: File[]) => {
-    console.log("Files changed:", files);
-    setUploadedFiles(files);
-  };
-
   const handleTextareaChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
@@ -28,6 +23,19 @@ export default function JobAppTrackerPage() {
     setIsBreakAll(input.split(" ").some((w) => w.length > 30));
   };
 
+  const handleSubmit = () => {
+    if (textValue.trim().length > 0) {
+      // Handle text submission logic here
+      console.log("Text submitted:", textValue);
+      setTextValue(""); // Clear the textarea after submission
+    }
+    if (uploadedFiles.length > 0) {
+      // Handle file submission logic here
+      console.log("Files submitted:", uploadedFiles);
+      setUploadedFiles([]); // Clear the uploaded files after submission
+    }
+  };
+
   return (
     <div className="size-full flex flex-col justify-center gap-y-4 ">
       <h1 className="scroll-m-20 text-2xl font-semibold tracking-tight text-center">
@@ -37,25 +45,47 @@ export default function JobAppTrackerPage() {
       <FileDropZone
         accept={{ "image/*": [] }}
         maxSize={5 * 1024 * 1024} // 5MB
-        onFilesChange={handleFilesChange}
-        placeholder="Upload job posting screenshots"
-        description="Drag & drop or click to browse • Max 5MB per file"
+        uploadedFiles={uploadedFiles}
+        onFilesChange={(files: File[]) => {
+          setUploadedFiles(files);
+        }}
+        placeholder={
+          textValue.trim().length > 0
+            ? "Clear text input to upload files instead"
+            : "Upload job posting screenshots"
+        }
+        description={
+          textValue.trim().length > 0
+            ? "You can either paste job description OR upload screenshots"
+            : "Drag & drop or click to browse • Max 5MB per file"
+        }
         fileIcon={FileImage}
+        disabled={textValue.trim().length > 0}
       />
 
       <Separator />
 
-      <div>
+      <div className="flex flex-col gap-y-2">
         <Textarea
           aria-label="job description input box"
-          placeholder="Paste job description here"
+          placeholder={
+            uploadedFiles.length > 0
+              ? "Remove uploaded files to paste job posting instead"
+              : "Paste job posting here"
+          }
+          value={textValue}
           onChange={handleTextareaChange}
+          disabled={uploadedFiles.length > 0}
           className={`resize-none min-h-40 max-h-52 scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-neutral-500 break-words ${
             isBreakAll ? "break-all" : "break-words"
-          }`}
+          } ${uploadedFiles.length > 0 ? "opacity-50 cursor-not-allowed" : ""}`}
         />
+
+        <p className="text-xs text-neutral-500">
+          Simply copy everything from the job posting page and paste here
+        </p>
       </div>
-      <Button> Submit </Button>
+      <Button onClick={handleSubmit}> Submit </Button>
     </div>
   );
 }
