@@ -6,6 +6,30 @@ import { useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
+/**
+ * A reusable file upload component with drag & drop functionality
+ *
+ * Features:
+ * - Drag & drop file upload with visual feedback
+ * - File type and size validation
+ * - Duplicate file detection and prevention
+ * - Real-time toast notifications for errors/warnings
+ * - File preview with removal capability
+ *
+ * @example
+ * ```tsx
+ * <FileDropZone
+ *   accept={{ "image/*": [] }}
+ *   maxSize={5 * 1024 * 1024}
+ *   onFilesChange={(files) => setFiles(files)}
+ *   placeholder="Upload screenshots"
+ *   description="Max 5MB per file"
+ *   fileIcon={FileImage}
+ *   multiple={true}
+ * />
+ * ```
+ */
+
 interface FileUploadProps {
   onFilesChange?: (files: File[]) => void;
   accept: Record<string, string[]>;
@@ -26,30 +50,40 @@ export function FileDropZone({
   fileIcon: FileIcon = File,
 }: FileUploadProps) {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [duplicateFileCount, setDuplicateFileCount] = useState(0); // Move to state
 
-  const {
-    acceptedFiles,
-    getRootProps,
-    getInputProps,
-    isDragActive,
-    fileRejections,
-  } = useDropzone({
-    accept: accept,
-    maxSize: maxSize,
-    multiple: multiple,
-    onDrop: (acceptedFiles) => {
-      setUploadedFiles((prevFiles) => {
-        const newFiles = [...prevFiles, ...acceptedFiles];
-        onFilesChange?.(newFiles);
-        return newFiles;
-      });
-    },
-  });
+  const { getRootProps, getInputProps, isDragActive, fileRejections } =
+    useDropzone({
+      accept: accept,
+      maxSize: maxSize,
+      multiple: multiple,
+      onDrop: (acceptedFiles) => {
+        setUploadedFiles((prevFiles) => {
+          const newFiles = acceptedFiles.filter(
+            (newFile) =>
+              !prevFiles.some(
+                (existingFile) =>
+                  existingFile.name === newFile.name &&
+                  existingFile.size === newFile.size &&
+                  existingFile.lastModified === newFile.lastModified
+              )
+          );
+
+          const duplicateCount = acceptedFiles.length - newFiles.length;
+          setDuplicateFileCount(duplicateCount); // Update state
+
+          const allFiles = [...prevFiles, ...newFiles];
+          onFilesChange?.(allFiles);
+          return allFiles;
+        });
+      },
+    });
 
   // Show toast notifications for file rejections
   useEffect(() => {
     if (fileRejections.length > 0) {
       fileRejections.forEach(({ file, errors }) => {
+        console.log(errors);
         errors.forEach((error) => {
           const message =
             error.code === "file-too-large"
@@ -60,11 +94,28 @@ export function FileDropZone({
 
           toast.error(`${fileRejections.length} Upload Failed`, {
             description: message,
+            duration: 4000,
           });
         });
       });
     }
-  }, [fileRejections]);
+
+    if (duplicateFileCount > 0) {
+      toast.warning(
+        `${duplicateFileCount} Duplicate${
+          duplicateFileCount > 1 ? "s" : ""
+        } Skipped`,
+        {
+          description:
+            "Same file is already uploaded. Skipped duplicate upload.",
+          duration: 4000,
+        }
+      );
+
+      // Reset the count after showing toast
+      setDuplicateFileCount(0);
+    }
+  }, [fileRejections, duplicateFileCount]);
 
   return (
     <div className="container">
