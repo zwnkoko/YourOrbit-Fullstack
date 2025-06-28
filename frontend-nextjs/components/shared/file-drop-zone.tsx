@@ -38,6 +38,7 @@ interface FileUploadProps {
   placeholder: string;
   description: string;
   fileIcon?: LucideIcon;
+  disabled?: boolean;
 }
 
 export function FileDropZone({
@@ -48,6 +49,7 @@ export function FileDropZone({
   placeholder,
   description,
   fileIcon: FileIcon = File,
+  disabled = false,
 }: FileUploadProps) {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [duplicateFileCount, setDuplicateFileCount] = useState(0); // Move to state
@@ -57,6 +59,7 @@ export function FileDropZone({
       accept: accept,
       maxSize: maxSize,
       multiple: multiple,
+      disabled: disabled,
       onDrop: (acceptedFiles) => {
         setUploadedFiles((prevFiles) => {
           const newFiles = acceptedFiles.filter(
@@ -132,9 +135,9 @@ export function FileDropZone({
       {/* File Drop Zone */}
       <div
         {...getRootProps({
-          className: `border-2 border-dashed p-8 text-center cursor-pointer hover:border-neutral-500 transition-colors rounded-lg ${
+          className: `border-2 border-dashed p-8 text-center hover:border-neutral-500 transition-colors rounded-lg ${
             isDragActive && "border-blue-500 bg-blue-50 dark:bg-blue-950"
-          }`,
+          } ${disabled ? "opacity-50 cursor-not-allowed" : " cursor-pointer"}`,
         })}
       >
         <input {...getInputProps()} />
