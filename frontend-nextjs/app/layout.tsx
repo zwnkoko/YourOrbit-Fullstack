@@ -33,7 +33,7 @@ export default function RootLayout({
             <header className="pt-2">
               <NavBar title="🪐 yourOrbit" links={navLinks} />
             </header>
-            <main>{children}</main>
+            <main className="py-8">{children}</main>
             <footer className="flex flex-col items-center gap-4 pb-2">
               <Footer />
             </footer>
