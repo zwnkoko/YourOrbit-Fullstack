@@ -170,7 +170,6 @@ export function FileDropZone({
                   onClick={() => {
                     setUploadedFiles((prevFiles) => {
                       const newFiles = prevFiles.filter((_, i) => i !== index);
-                      onFilesChange?.(newFiles);
                       return newFiles;
                     });
                   }}
