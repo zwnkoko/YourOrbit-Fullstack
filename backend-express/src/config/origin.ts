@@ -3,7 +3,7 @@ const getOrigins = () => {
     return [process.env.FRONTEND_URL as string];
   }
 
-  return ["http://localhost:3000"];
+  return [process.env.DEV_FRONTEND_URL || "http://localhost:3000"];
 };
 
 export const allowedOrigins = getOrigins();
