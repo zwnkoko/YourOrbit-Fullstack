@@ -4,6 +4,7 @@
 
 - [ ] Add unit tests for login-form component
 - [ ] Add demo login feature for login-form component
+- [ ] Add unit tests for useAuthGuard hook
 
 ## Medium Priority
 
