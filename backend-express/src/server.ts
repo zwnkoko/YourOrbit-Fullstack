@@ -13,7 +13,7 @@ function checkEnvVars(vars: string[]) {
   if (missing.length > 0) {
     console.error(
       `\n❌ Missing required environment variables: ${missing.join(", ")}\n` +
-        "Please create a .env file based on .env.example and fill in the missing values.\n" +
+        "Please create a .env.development file based on .env.example and fill in the missing values.\n" +
         "See the README for more details.\n"
     );
     process.exit(1);
