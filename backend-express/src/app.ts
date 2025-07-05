@@ -4,6 +4,7 @@ import routes from "./routes";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "@/lib/auth";
 import cors from "cors";
+import { allowedOrigins } from "@config/origin";
 
 const app = express();
 
@@ -11,13 +12,7 @@ const app = express();
 // This allows requests from specific origins and methods
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "http://localhost:3001",
-      "http://127.0.0.1:3000",
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    origin: allowedOrigins,
     credentials: true,
   })
 );

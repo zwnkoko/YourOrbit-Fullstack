@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { PrismaClient } from "@generated/prisma";
+import { allowedOrigins } from "@config/origin";
 
 const prisma = new PrismaClient();
 export const auth = betterAuth({
@@ -18,7 +19,7 @@ export const auth = betterAuth({
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
     },
   },
-  trustedOrigins: ["http://localhost:3000"],
+  trustedOrigins: allowedOrigins,
   // session: {
   //   expiresIn: 60,
   // },
