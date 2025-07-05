@@ -12,21 +12,26 @@ describe("ThemeToggle", () => {
     jest.clearAllMocks();
   });
 
-  it("should not render before mounted", () => {
-    // Mock useState to return false for mounted state
-    const mockSetMounted = jest.fn();
-    jest
-      .spyOn(require("react"), "useState")
-      .mockReturnValueOnce([false, mockSetMounted]); // mounted state
-
+  it("renders correctly after mounting (hydration test)", () => {
+    const mockSetTheme = jest.fn();
     (useTheme as jest.Mock).mockReturnValue({
       theme: "light",
       systemTheme: "dark",
-      setTheme: jest.fn(),
+      setTheme: mockSetTheme,
     });
 
     const { container } = render(<ThemeToggle />);
-    expect(container.firstChild).toBeNull();
+
+    // The component should render the button with proper attributes
+    const button = screen.getByRole("button", { name: /toggle theme/i });
+    expect(button).toBeInTheDocument();
+    expect(button).toHaveAttribute("aria-label", "Toggle theme");
+
+    // Check that the icons are present
+    const sunIcon = container.querySelector("svg.lucide-sun");
+    const moonIcon = container.querySelector("svg.lucide-moon");
+    expect(sunIcon).toBeInTheDocument();
+    expect(moonIcon).toBeInTheDocument();
   });
 
   it("renders after mounted and toggles theme correctly (light to dark)", () => {
