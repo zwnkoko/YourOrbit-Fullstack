@@ -1,13 +1,12 @@
 import dotenv from "dotenv";
 
-// Load the appropriate .env file
-if (process.env.NODE_ENV === "production") {
-  dotenv.config({ path: ".env.production" });
-  console.log("Using .env.production");
-} else {
-  dotenv.config();
-  console.log("Using .env");
-}
+// Load environment-specific .env file
+const envFile =
+  process.env.NODE_ENV === "production"
+    ? ".env.production"
+    : ".env.development";
+
+dotenv.config({ path: envFile });
 
 function checkEnvVars(vars: string[]) {
   const missing = vars.filter((v) => !process.env[v]);

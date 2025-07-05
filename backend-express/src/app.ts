@@ -4,7 +4,6 @@ import routes from "./routes";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "@/lib/auth";
 import cors from "cors";
-import { allowedOrigins } from "@config/origin";
 
 const app = express();
 
@@ -12,7 +11,7 @@ const app = express();
 // This allows requests from specific origins and methods
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: [process.env.FRONTEND_URL as string],
     credentials: true,
   })
 );
