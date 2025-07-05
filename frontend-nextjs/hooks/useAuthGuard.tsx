@@ -8,7 +8,6 @@ export function useAuthGuard() {
   const { data: session, isPending } = useSession();
 
   useEffect(() => {
-    console.log("useAuthGuard - session:", session, "isPending:", isPending);
     if (!isPending && !session) {
       console.log("isPending:", isPending, "session:", session);
       setShowAuthModal(true);
