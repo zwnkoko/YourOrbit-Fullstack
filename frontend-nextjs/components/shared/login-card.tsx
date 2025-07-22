@@ -109,6 +109,10 @@ export function LoginCard() {
           Sign in with Github
         </Button>
 
+        <p className="text-xs text-muted-foreground text-center">
+          Accounts with the same email address will be automatically linked
+        </p>
+
         <div className="relative py-1">
           <div className="absolute inset-0 flex items-center">
             <span className="w-full border-t" />
