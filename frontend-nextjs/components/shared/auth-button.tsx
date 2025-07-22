@@ -39,7 +39,9 @@ export function AuthButton() {
     );
   }
 
-  // if the user is authenticated, show the sign out button
+  // if the user is authenticated, show the user avatar and sign out button
+  // in development mode, the avatar may not show user profile image
+  // because component is rendered twice due to strict mode and server(google, github) may reject instantaneous double requests
   if (isAuthenticated) {
     return (
       <>
@@ -48,7 +50,11 @@ export function AuthButton() {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="w-7 h-7">
                 <Avatar className="w-7 h-7">
-                  <AvatarImage src={session.user.image || undefined} />
+                  <AvatarImage
+                    key={session.user.image}
+                    src={session.user.image || undefined}
+                    alt="profile picture"
+                  />
                   <AvatarFallback>
                     <CircleUserRound />
                   </AvatarFallback>
