@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { NavBar } from "@/components/shared/nav-bar";
 import { Footer } from "@/components/shared/footer";
 import { navLinks } from "@/app/navLinks";
+import { QueryProvider } from "@/components/query-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -23,22 +24,24 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
       <body className="antialiased">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="mx-2 grid min-h-dvh grid-rows-[auto_1fr_auto] md:mx-auto md:max-w-7xl">
-            <header className="pt-2">
-              <NavBar title="🪐 yourOrbit" links={navLinks} />
-            </header>
-            <main className="py-8">{children}</main>
-            <footer className="flex flex-col items-center gap-4 pb-2">
-              <Footer />
-            </footer>
-          </div>
-        </ThemeProvider>
+        <QueryProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div className="mx-2 grid min-h-dvh grid-rows-[auto_1fr_auto] md:mx-auto md:max-w-7xl">
+              <header className="pt-2">
+                <NavBar title="🪐 yourOrbit" links={navLinks} />
+              </header>
+              <main className="py-8">{children}</main>
+              <footer className="flex flex-col items-center gap-4 pb-2">
+                <Footer />
+              </footer>
+            </div>
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );
