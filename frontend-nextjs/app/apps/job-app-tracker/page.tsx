@@ -9,8 +9,13 @@ import { AuthDialog } from "@/components/shared/auth-dialog";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
+import { apiRoutes } from "@/lib/api-routes";
+import { useMutation } from "@tanstack/react-query";
 
 export default function JobAppTrackerPage() {
+  // Destructure the extractText route from apiRoutes
+  const { extractText: extractTextRoute } = apiRoutes.jobAppTracker;
+
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [isBreakAll, setIsBreakAll] = useState(false);
   const [textValue, setTextValue] = useState("");
@@ -36,9 +41,7 @@ export default function JobAppTrackerPage() {
     }
     requireAuth(() => {
       if (textValue.trim().length > 0) {
-        // Handle text submission logic here
-        console.log("Text submitted:", textValue);
-        //setTextValue(""); // Clear the textarea after submission
+        submitTextMutation.mutate(textValue);
       }
       if (uploadedFiles.length > 0) {
         // Handle file submission logic here
@@ -47,6 +50,33 @@ export default function JobAppTrackerPage() {
       }
     });
   };
+
+  const submitTextMutation = useMutation({
+    mutationFn: async (text: string) => {
+      const response = await fetch(extractTextRoute, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit text");
+      }
+
+      return response.json();
+    },
+    onSuccess: (data) => {
+      toast.success("Text submitted successfully!");
+      console.log("Response data:", data);
+      setTextValue("");
+    },
+    onError: (error: Error) => {
+      toast.error(`Error: ${error.message}`);
+      console.error("Error submitting text:", error);
+    },
+  });
 
   return (
     <>

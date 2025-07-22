@@ -7,4 +7,9 @@ router.get("/", (_req, res) => {
   res.json({ message: "Job App Tracker API is working!" });
 });
 
+router.post("/extract-text", (req, res) => {
+  console.log(req.body);
+  res.json({ message: "To implement OCR" });
+});
+
 export default router;
