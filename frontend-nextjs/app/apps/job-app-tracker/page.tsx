@@ -50,7 +50,7 @@ export default function JobAppTrackerPage() {
 
   return (
     <>
-      <div className="size-full flex flex-col justify-center gap-y-4 ">
+      <div className="size-full flex flex-col justify-center gap-y-4 items-center">
         <h1 className="scroll-m-20 text-2xl font-semibold tracking-tight text-center">
           Job Application Tracker
         </h1>
@@ -76,7 +76,7 @@ export default function JobAppTrackerPage() {
           disabled={textValue.trim().length > 0}
         />
 
-        <div className="relative py-1">
+        <div className="container relative py-1">
           <div className="absolute inset-0 flex items-center">
             <span className="w-full border-t" />
           </div>
@@ -85,7 +85,7 @@ export default function JobAppTrackerPage() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-y-2">
+        <div className="container flex flex-col gap-y-2">
           <Textarea
             aria-label="job description input box"
             placeholder={
@@ -96,7 +96,7 @@ export default function JobAppTrackerPage() {
             value={textValue}
             onChange={handleTextareaChange}
             disabled={uploadedFiles.length > 0}
-            className={`resize-none min-h-40 max-h-52 scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-neutral-500 break-words ${
+            className={`resize-none h-40 scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-neutral-500 break-words ${
               isBreakAll ? "break-all" : "break-words"
             } ${
               uploadedFiles.length > 0 ? "opacity-50 cursor-not-allowed" : ""
@@ -107,7 +107,9 @@ export default function JobAppTrackerPage() {
             Simply copy everything from the job posting page and paste here
           </p>
         </div>
-        <Button onClick={handleSubmit}> Submit </Button>
+        <Button className="container" onClick={handleSubmit}>
+          Submit
+        </Button>
       </div>
 
       {showAuthModal && (
